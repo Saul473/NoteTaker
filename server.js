@@ -8,14 +8,24 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res)=>
-    res.sendFile(path.join(__dirname, '/public/index.html'))
-);
-app.get('/', (req, res)=>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
+app.get('/', (req, res)=>
+    res.sendFile(path.join(__dirname, '/public/index.html'))
+);
 
-module.exports = function(app){
-    app.get('/api/notes', (req, res)=>{
-        console.log('execute GET notes request');
+app.get('/api/notes', (req, res)=>{
+    try {
+        res.send(JSON.parse(fs.readFileSync('db/db.json')))
+    } catch {
+        console.log('there has been an error!');
+        res.sendStatus(500);
+    }
+});
+
+app.post('/api/notes', (req, res)=>{
+    let notes = JSON.parse(fs.readFileSync('db/db.json'))
+    notes.push({
+        
     })
-}
+})
